@@ -1,0 +1,45 @@
+<% layout('layout') -%>
+<section>
+    <h1>Students</h1>
+    <form action="get" class="toolbar" action="/students">
+        <input type="text" name="search" id="search" value="<%= search %>"
+        placeholder="Search name, email, internet">
+            <select name="cohort" id="cohort">
+                <option value="">All Cohorts</option>
+                <option <%= cohort=== 'Year 1' ? 'selected': '' %>>Year 1</option>
+                <option <%= cohort=== 'Year 2' ? 'selected': '' %>>Year 2</option>
+                <option <%= cohort=== 'Alumni' ? 'selected': '' %>>Alumni</option>
+            </select>
+            <button type="submit">Filter</button>
+        </input>
+    </form>
+    
+    <table class="table">
+        <thead>
+            <tr><th>Name</th><th>Email</th><th>Cohort</th><th>Interests</th></tr>
+        </thead>
+        <tbody>
+            <% students.forEach(student =>{ %>
+                <tr>
+                    <td>
+                        <a href="/students/<%= student.id %>">
+                            <%= student.firstName %><%= student.lastName %>
+                        </a>
+                    </td>
+                    <td><%= student.email %></td>
+                    <td><%= student.cohort %></td>
+                    <td><%= (students.interests || []).join(', ') %></td>
+                    <td class="actions">
+                        <a class="btn small" href="/students/<% s._id %>/edit">Edit</a>
+                        <form method="post" action="/student/<% s._id %>?
+                        method=DELETE" onsubmit="return confirm('Delete this student?')"></form>
+                        <button class="danger small">Delete</button>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    <% if(!students.length){ %>
+        <p>No Students Found</p>
+    <% } %>
+</section>
